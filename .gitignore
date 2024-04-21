@@ -1,0 +1,18 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore compiled TypeScript files
+dist/
+
+# Ignore any generated files
+*.log
+*.json
+*.swp
+*.tgz
+*.zip
+
+# Ignore local configuration files
+.env
+
+# Ignore macOS system files
+.DS_Store
