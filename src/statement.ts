@@ -2,6 +2,8 @@ export function statement(invoice: any, movies: any): string {
     const statementData = {} as any;
     statementData.customer = invoice.customer;
     statementData.rentals = invoice.rentals.map(enrichRental);
+    statementData.totalAmount = totalAmount(statementData);
+    statementData.totalFrequentRenterPoints = totalFrequentRenterPoints(statementData);
     return renderPlainText(statementData);
 
     function enrichRental(rental: any) {
@@ -47,6 +49,22 @@ export function statement(invoice: any, movies: any): string {
             result++;
         return result;
     }
+
+    function totalAmount(data: any) {
+        let totalAmount = 0;
+        for (const rental of data.rentals) {
+            totalAmount += rental.amount;
+        }
+        return totalAmount;
+    }
+
+    function totalFrequentRenterPoints(data: any) {
+        let frequentRenterPoints = 0;
+        for (const rental of data.rentals) {
+            frequentRenterPoints += rental.frequentRenterPoints;
+        }
+        return frequentRenterPoints;
+    }
 }
 
 export function renderPlainText(data: any): string {
@@ -57,24 +75,8 @@ export function renderPlainText(data: any): string {
     }
     
     // add footer lines
-    result += "Amount owed is " + totalAmount().toFixed(1) + "\n";
-    result += "You earned " + totalFrequentRenterPoints() + " frequent renter points";
+    result += "Amount owed is " + data.totalAmount.toFixed(1) + "\n";
+    result += "You earned " + data.totalFrequentRenterPoints + " frequent renter points";
 
     return result;
-
-    function totalAmount() {
-        let totalAmount = 0;
-        for (const rental of data.rentals) {
-            totalAmount += rental.amount;
-        }
-        return totalAmount;
-    }
-
-    function totalFrequentRenterPoints() {
-        let frequentRenterPoints = 0;
-        for (const rental of data.rentals) {
-            frequentRenterPoints += rental.frequentRenterPoints;
-        }
-        return frequentRenterPoints;
-    }
 }
