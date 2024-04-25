@@ -1,12 +1,14 @@
 export function statement(invoice: any, movies: any): string {
-    const statementData = {};
-    return renderPlainText(statementData, invoice, movies);
+    const statementData = {} as any;
+    statementData.customer = invoice.customer;
+    statementData.rentals = invoice.rentals;
+    return renderPlainText(statementData, movies);
 }
 
-export function renderPlainText(data: any, invoice: any, movies: any): string {
-    let result = "Rental Record for " + invoice.customer + "\n";
+export function renderPlainText(data: any, movies: any): string {
+    let result = "Rental Record for " + data.customer + "\n";
     
-    for (const rental of invoice.rentals) {
+    for (const rental of data.rentals) {
         result += "\t" + (movieFor(rental)).title + "\t" + (amountFor(rental)).toFixed(1) + "\n";
     }
     
@@ -18,7 +20,7 @@ export function renderPlainText(data: any, invoice: any, movies: any): string {
 
     function totalAmount() {
         let totalAmount = 0;
-        for (const rental of invoice.rentals) {
+        for (const rental of data.rentals) {
             totalAmount += amountFor(rental);
         }
         return totalAmount;
@@ -26,7 +28,7 @@ export function renderPlainText(data: any, invoice: any, movies: any): string {
 
     function totalFrequentRenterPoints() {
         let frequentRenterPoints = 0;
-        for (const rental of invoice.rentals) {
+        for (const rental of data.rentals) {
             frequentRenterPoints += frequentRenterPointsFor(rental);
         }
         return frequentRenterPoints;
