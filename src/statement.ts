@@ -1,8 +1,9 @@
 export function statement(invoice: any, movies: any): string {
-    return renderPlainText(invoice, movies);
+    const statementData = {};
+    return renderPlainText(statementData, invoice, movies);
 }
 
-export function renderPlainText(invoice: any, movies: any): string {
+export function renderPlainText(data: any, invoice: any, movies: any): string {
     let result = "Rental Record for " + invoice.customer + "\n";
     
     for (const rental of invoice.rentals) {
