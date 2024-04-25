@@ -6,10 +6,7 @@ export function statement(invoice: any, movies: any): string {
     for (const rental of invoice.rentals) {
 
         // add frequent renter points
-        frequentRenterPoints++;
-        // add bonus for a two day new release rental
-        if (((movieFor(rental)).category === "new release") && rental.daysRented > 1)
-            frequentRenterPoints++;
+        frequentRenterPoints += frequentRenterPointsFor(rental);
 
         // show figures for this rental
         result += "\t" + (movieFor(rental)).title + "\t" + (amountFor(rental)).toFixed(1) + "\n";
@@ -21,6 +18,14 @@ export function statement(invoice: any, movies: any): string {
     result += "You earned " + frequentRenterPoints + " frequent renter points";
 
     return result;
+
+    function frequentRenterPointsFor(rental: any) {
+        let result = 1;
+        // add bonus for a two day new release rental
+        if (((movieFor(rental)).category === "new release") && rental.daysRented > 1)
+            result++;
+        return result;
+    }
 
     function amountFor(rental: any) {
         let result = 0;
