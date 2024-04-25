@@ -51,19 +51,11 @@ export function statement(invoice: any, movies: any): string {
     }
 
     function totalAmount(data: any) {
-        let totalAmount = 0;
-        for (const rental of data.rentals) {
-            totalAmount += rental.amount;
-        }
-        return totalAmount;
+        return data.rentals.reduce((total: number, rental: any) => total + rental.amount, 0);
     }
 
     function totalFrequentRenterPoints(data: any) {
-        let frequentRenterPoints = 0;
-        for (const rental of data.rentals) {
-            frequentRenterPoints += rental.frequentRenterPoints;
-        }
-        return frequentRenterPoints;
+        return data.rentals.reduce((total: number, rental: any) => total + rental.frequentRenterPoints, 0);
     }
 }
 
