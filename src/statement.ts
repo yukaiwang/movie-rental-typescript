@@ -1,10 +1,14 @@
 export function statement(invoice: any, movies: any): string {
+    return renderPlainText(createStatementData(invoice, movies));
+}
+
+export function createStatementData(invoice: any, movies: any): string {
     const statementData = {} as any;
     statementData.customer = invoice.customer;
     statementData.rentals = invoice.rentals.map(enrichRental);
     statementData.totalAmount = totalAmount(statementData);
     statementData.totalFrequentRenterPoints = totalFrequentRenterPoints(statementData);
-    return renderPlainText(statementData);
+    return statementData;
 
     function enrichRental(rental: any) {
         const result = {...rental};
