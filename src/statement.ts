@@ -1,18 +1,23 @@
 export function statement(invoice: any, movies: any): string {
-    let totalAmount = 0;
     let result = "Rental Record for " + invoice.customer + "\n";
     
     for (const rental of invoice.rentals) {
-        // show figures for this rental
         result += "\t" + (movieFor(rental)).title + "\t" + (amountFor(rental)).toFixed(1) + "\n";
-        totalAmount += amountFor(rental);
     }
     
     // add footer lines
-    result += "Amount owed is " + totalAmount.toFixed(1) + "\n";
+    result += "Amount owed is " + totalAmount().toFixed(1) + "\n";
     result += "You earned " + totalFrequentRenterPoints() + " frequent renter points";
 
     return result;
+
+    function totalAmount() {
+        let totalAmount = 0;
+        for (const rental of invoice.rentals) {
+            totalAmount += amountFor(rental);
+        }
+        return totalAmount;
+    }
 
     function totalFrequentRenterPoints() {
         let frequentRenterPoints = 0;
