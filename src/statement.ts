@@ -1,10 +1,10 @@
-import { createStatementData } from "./createStatementData";
+import { StatementData, createStatementData } from "./createStatementData";
 
 export function statement(invoice: any, movies: any): string {
     return renderPlainText(createStatementData(invoice, movies));
 }
 
-export function renderPlainText(data: any): string {
+export function renderPlainText(data: StatementData): string {
     let result = "Rental Record for " + data.customer + "\n";
     
     for (const rental of data.rentals) {

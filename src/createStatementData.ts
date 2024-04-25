@@ -1,5 +1,20 @@
-export function createStatementData(invoice: any, movies: any): string {
-    const statementData = {} as any;
+export type StatementData = {
+    customer: string;
+    rentals: {
+        movie: {
+            title: string;
+            category: string;
+        };
+        daysRented: number;
+        amount: number;
+        frequentRenterPoints: number;
+    }[];
+    totalAmount: number;
+    totalFrequentRenterPoints: number;
+};
+
+export function createStatementData(invoice: any, movies: any): StatementData {
+    const statementData = {} as StatementData;
     statementData.customer = invoice.customer;
     statementData.rentals = invoice.rentals.map(enrichRental);
     statementData.totalAmount = totalAmount(statementData);
@@ -14,11 +29,11 @@ export function createStatementData(invoice: any, movies: any): string {
         return result;
     }
 
-    function movieFor(rental: any) {
+    function movieFor(rental: { movie: string}) {
         return movies[rental.movie];
     }
 
-    function amountFor(rental: any) {
+    function amountFor(rental: { movie: { category: string }, daysRented: number}) {
         let result = 0;
 
         // determine amounts for rental line
@@ -42,7 +57,7 @@ export function createStatementData(invoice: any, movies: any): string {
         return result;
     }
 
-    function frequentRenterPointsFor(rental: any) {
+    function frequentRenterPointsFor(rental: { movie: { category: string }, daysRented: number }) {
         let result = 1;
         // add bonus for a two day new release rental
         if ((rental.movie.category === "new release") && rental.daysRented > 1)
