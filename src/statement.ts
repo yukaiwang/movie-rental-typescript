@@ -8,6 +8,7 @@ export function statement(invoice: any, movies: any): string {
         const result = {...rental};
         result.movie = movieFor(result);
         result.amount = amountFor(result);
+        result.frequentRenterPoints = frequentRenterPointsFor(result);
         return result;
     }
 
@@ -38,6 +39,14 @@ export function statement(invoice: any, movies: any): string {
         }
         return result;
     }
+
+    function frequentRenterPointsFor(rental: any) {
+        let result = 1;
+        // add bonus for a two day new release rental
+        if ((rental.movie.category === "new release") && rental.daysRented > 1)
+            result++;
+        return result;
+    }
 }
 
 export function renderPlainText(data: any): string {
@@ -64,16 +73,8 @@ export function renderPlainText(data: any): string {
     function totalFrequentRenterPoints() {
         let frequentRenterPoints = 0;
         for (const rental of data.rentals) {
-            frequentRenterPoints += frequentRenterPointsFor(rental);
+            frequentRenterPoints += rental.frequentRenterPoints;
         }
         return frequentRenterPoints;
-    }
-
-    function frequentRenterPointsFor(rental: any) {
-        let result = 1;
-        // add bonus for a two day new release rental
-        if ((rental.movie.category === "new release") && rental.daysRented > 1)
-            result++;
-        return result;
     }
 }
