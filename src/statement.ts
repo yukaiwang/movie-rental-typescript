@@ -3,25 +3,24 @@ export function statement(invoice: any, movies: any): string {
     let frequentRenterPoints = 0;
     let result = "Rental Record for " + invoice.customer + "\n";
 
-    for (const each of invoice.rentals) {
-        const movie = movies[each.movie];
+    for (const rental of invoice.rentals) {
         let thisAmount = 0;
 
-        // determine amounts for each line
-        switch (movie.category) {
+        // determine amounts for rental line
+        switch ((movieFor(rental)).category) {
             case "regular":
                 thisAmount += 2;
-                if (each.daysRented > 2) {
-                    thisAmount += (each.daysRented - 2) * 1.5;
+                if (rental.daysRented > 2) {
+                    thisAmount += (rental.daysRented - 2) * 1.5;
                 }
                 break;
             case "new release":
-                thisAmount += each.daysRented * 3;
+                thisAmount += rental.daysRented * 3;
                 break;
             case "children":
                 thisAmount += 1.5;
-                if (each.daysRented > 3) {
-                    thisAmount += (each.daysRented - 3) * 1.5;
+                if (rental.daysRented > 3) {
+                    thisAmount += (rental.daysRented - 3) * 1.5;
                 }
                 break;
         }
@@ -29,11 +28,11 @@ export function statement(invoice: any, movies: any): string {
         // add frequent renter points
         frequentRenterPoints++;
         // add bonus for a two day new release rental
-        if ((movie.category === "new release") && each.daysRented > 1)
+        if (((movieFor(rental)).category === "new release") && rental.daysRented > 1)
             frequentRenterPoints++;
 
         // show figures for this rental
-        result += "\t" + movie.title + "\t" + thisAmount.toFixed(1) + "\n";
+        result += "\t" + (movieFor(rental)).title + "\t" + thisAmount.toFixed(1) + "\n";
         totalAmount += thisAmount;
     }
 
@@ -42,4 +41,8 @@ export function statement(invoice: any, movies: any): string {
     result += "You earned " + frequentRenterPoints + " frequent renter points";
 
     return result;
+
+    function movieFor(rental: any) {
+        return movies[rental.movie];
+    }
 }
