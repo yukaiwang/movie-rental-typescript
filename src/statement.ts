@@ -6,50 +6,13 @@ export function statement(invoice: any, movies: any): string {
 
     function enrichRental(rental: any) {
         const result = {...rental};
-        result.movie = movieFor(rental);
+        result.movie = movieFor(result);
+        result.amount = amountFor(result);
         return result;
     }
 
     function movieFor(rental: any) {
         return movies[rental.movie];
-    }
-}
-
-export function renderPlainText(data: any): string {
-    let result = "Rental Record for " + data.customer + "\n";
-    
-    for (const rental of data.rentals) {
-        result += "\t" + rental.movie.title + "\t" + (amountFor(rental)).toFixed(1) + "\n";
-    }
-    
-    // add footer lines
-    result += "Amount owed is " + totalAmount().toFixed(1) + "\n";
-    result += "You earned " + totalFrequentRenterPoints() + " frequent renter points";
-
-    return result;
-
-    function totalAmount() {
-        let totalAmount = 0;
-        for (const rental of data.rentals) {
-            totalAmount += amountFor(rental);
-        }
-        return totalAmount;
-    }
-
-    function totalFrequentRenterPoints() {
-        let frequentRenterPoints = 0;
-        for (const rental of data.rentals) {
-            frequentRenterPoints += frequentRenterPointsFor(rental);
-        }
-        return frequentRenterPoints;
-    }
-
-    function frequentRenterPointsFor(rental: any) {
-        let result = 1;
-        // add bonus for a two day new release rental
-        if ((rental.movie.category === "new release") && rental.daysRented > 1)
-            result++;
-        return result;
     }
 
     function amountFor(rental: any) {
@@ -73,6 +36,44 @@ export function renderPlainText(data: any): string {
                 }
                 break;
         }
+        return result;
+    }
+}
+
+export function renderPlainText(data: any): string {
+    let result = "Rental Record for " + data.customer + "\n";
+    
+    for (const rental of data.rentals) {
+        result += "\t" + rental.movie.title + "\t" + rental.amount.toFixed(1) + "\n";
+    }
+    
+    // add footer lines
+    result += "Amount owed is " + totalAmount().toFixed(1) + "\n";
+    result += "You earned " + totalFrequentRenterPoints() + " frequent renter points";
+
+    return result;
+
+    function totalAmount() {
+        let totalAmount = 0;
+        for (const rental of data.rentals) {
+            totalAmount += rental.amount;
+        }
+        return totalAmount;
+    }
+
+    function totalFrequentRenterPoints() {
+        let frequentRenterPoints = 0;
+        for (const rental of data.rentals) {
+            frequentRenterPoints += frequentRenterPointsFor(rental);
+        }
+        return frequentRenterPoints;
+    }
+
+    function frequentRenterPointsFor(rental: any) {
+        let result = 1;
+        // add bonus for a two day new release rental
+        if ((rental.movie.category === "new release") && rental.daysRented > 1)
+            result++;
         return result;
     }
 }
