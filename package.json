@@ -1,0 +1,23 @@
+{
+    "name": "movie-rental-typescript",
+    "version": "1.0.0",
+    "description": "Typescript implementation of the kata \"Rental Movie\"",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha --require ts-node/register **/*.test.ts"
+    },
+    "keywords": [
+        "kata",
+        "refactoring"
+    ],
+    "author": "Yukai Wang",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/chai": "^4.3.5",
+        "@types/mocha": "^9.0.0",
+        "chai": "^4.3.4",
+        "mocha": "^9.1.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^4.6.3"
+    }
+}
